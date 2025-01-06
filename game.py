@@ -1,32 +1,45 @@
-import os
+import os, sys
 import pygame
-import random
-import math
 
-
+from os.path import join
+from scripts.tilemap import Tilemap
+from scripts.utils import load_image, load_images, Animation
 
 class Game:
     def __init__(self):
         # Initialize Game Window
         pygame.init()
-        SCREEN_WIDTH = 800
-        SCREEN_HEIGHT = 600
+        SCREEN_WIDTH = 1000
+        SCREEN_HEIGHT = 800
         pygame.display.set_caption("Dark Pursuit")
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.display = pygame.Surface((SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+        self.display = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.frame_update = 60
         self.running = True
 
+        self.assets = {
+            'stone': load_images(join('tiles', 'stone')),
+        }
+
+        self.tilemap = Tilemap(self, tile_size=16)
+        tilemap_path = 'data/entities/maps/0.json'
+        if not os.path.exists(tilemap_path):
+            raise FileNotFoundError(f"Tilemap file not found: {tilemap_path}")
+        self.tilemap.load(tilemap_path)
+        print(f"Tilemap loaded from {tilemap_path}")
+
     def run(self):
         while self.running:
+            self.display.fill((0, 0, 0))
+            render_scroll = (0, 0)
+            self.tilemap.render(self.display, offset=render_scroll)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    sys.exit()
 
-            self.display.fill((0, 0, 0))
-            scaled_display = pygame.transform.scale(self.display, self.screen.get_size())
-            self.screen.blit(scaled_display, (0, 0))
+            self.screen.blit(self.display, (0, 0))
             pygame.display.flip()
             self.clock.tick(self.frame_update)
 
