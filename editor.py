@@ -11,8 +11,8 @@ class Editor:
     def __init__(self):
         pygame.init()
 
-        SCREEN_WIDTH = 1000
-        SCREEN_HEIGHT = 800
+        SCREEN_WIDTH = 1152
+        SCREEN_HEIGHT = 624
         self.frame_update = 60
         pygame.display.set_caption('EDITOR')
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))

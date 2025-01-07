@@ -9,8 +9,8 @@ class Game:
     def __init__(self):
         # Initialize Game Window
         pygame.init()
-        SCREEN_WIDTH = 1000
-        SCREEN_HEIGHT = 800
+        SCREEN_WIDTH = 1152
+        SCREEN_HEIGHT = 624
         pygame.display.set_caption("Dark Pursuit")
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.display = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -19,6 +19,7 @@ class Game:
         self.running = True
 
         self.assets = {
+            'background': load_image(join('background.png')),
             'stone': load_images(join('tiles', 'stone')),
         }
 
@@ -31,7 +32,8 @@ class Game:
 
     def run(self):
         while self.running:
-            self.display.fill((0, 0, 0))
+            self.display.fill((0, 0, 0, 0))
+            self.display.blit(self.assets['background'], (0, 0))
             render_scroll = (0, 0)
             self.tilemap.render(self.display, offset=render_scroll)
             for event in pygame.event.get():
